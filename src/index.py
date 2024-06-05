@@ -12,10 +12,12 @@ def Main(fileName):
 
     filtered_code = [item for item in code if item[1] != '']
 
-    code = addBrickets(filtered_code)
+    code = addBrackets(filtered_code)
 
     code = tradutor(filtered_code)
 
+    for i in range(0, len(code)):
+        print(code[i])
     for i in range(0, len(code)):
         print(code[i][1])
 
@@ -56,34 +58,30 @@ def splitCode(code):
     
     return splitedCode
 
-def addBrickets(code):
-    brickets = 0
+def addBrackets(code):
+    brackets = 0
     nivel = code[0][0]
     for i in range(len(code)):
-        if ":" in code[i][1]:
-            print(code[i][1])
+        if ":" in code[i][1] and not "print" in code[i][1]:
             code[i][1] = code[i][1].replace(":", "{")
-            print(code[i][1])
-            brickets += 1
+            brackets += 1
 
-        if nivel > code[i][0] and brickets > 0:
-            code[i][1] = "}\n" + code[i][0] * " " + code[i][1]
-            brickets -= 1
+        if nivel > code[i][0] and brackets > 0:
+            numBrackets = int((nivel - code[i][0])/4)
+            print(numBrackets)
+            code[i][1] = code[i][0] * " " + "}" * numBrackets + "\n" + code[i][0] * " " + code[i][1]
+            brackets -= 1
         else:
             code[i][1] = code[i][0] * " " + code[i][1]
         
         nivel = code[i][0]
         
-
-
     return code
 
 def tradutor(code):
     for i in range(len(code)):
         if "def"in code[i][1]:
-            print("Entrou aqui")
             code[i][1] = code[i][1].replace("def", "function")
-    print(code)
     return code
 
 nome_arquivo = "insertion.py"
