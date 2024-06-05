@@ -67,8 +67,10 @@ def addBrickets(code):
             brickets += 1
 
         if nivel > code[i][0] and brickets > 0:
-            code[i][1] = "}\n" + code[i][1]
+            code[i][1] = "}\n" + code[i][0] * " " + code[i][1]
             brickets -= 1
+        else:
+            code[i][1] = code[i][0] * " " + code[i][1]
         
         nivel = code[i][0]
         
