@@ -69,7 +69,7 @@ def addBrackets(code):
         if nivel > code[i][0] and brackets > 0:
             numBrackets = int((nivel - code[i][0])/4)
             print(numBrackets)
-            code[i][1] = code[i][0] * " " + "}" * numBrackets + "\n" + code[i][0] * " " + code[i][1]
+            code[i][1] = code[i][0] * " " + "}\n" * numBrackets + code[i][0] * " " + code[i][1]
             brackets -= 1
         else:
             code[i][1] = code[i][0] * " " + code[i][1]
@@ -82,6 +82,48 @@ def tradutor(code):
     for i in range(len(code)):
         if "def"in code[i][1]:
             code[i][1] = code[i][1].replace("def", "function")
+
+        if "print" in code[i][1]:
+            code[i][1] = code[i][1].replace("print", "console.log")
+
+        words = code[i][1].split()
+        if len(words) > 1 and "=" in words:
+            var_index = words.index("=") - 1
+            if var_index >= 0 and words[var_index] not in ["if", "for", "while"]:
+                code[i][1] = code[i][1].replace(words[var_index], f"let {words[var_index]}")
+
+        if words[0] == "while":
+            condition_start = code[i][1].find("while") + len("while")
+            condition = code[i][1][condition_start:].strip()
+            code[i][1] = " " * code[i][0] + f"while ({condition})"
+            code[i][1] = code[i][1].replace("{", "") + "{"
+        
+        if words[0] == "for":
+            var_name = words[1]
+            in_keyword_index = code[i][1].find("in")
+            iter_expression = code[i][1][in_keyword_index + 2:].strip()
+            if iter_expression.startswith("range(") and iter_expression.endswith(")"):
+                range_args = iter_expression[6:-1].split(',')
+                if len(range_args) == 1:
+                    start = 0
+                    end = range_args[0]
+                    step = 1
+                elif len(range_args) == 2:
+                    start = range_args[0]
+                    end = range_args[1]
+                    step = 1
+                elif len(range_args) == 3:
+                    start = range_args[0]
+                    end = range_args[1]
+                    step = range_args[2]
+                code[i][1] = " " * code[i][0] + f"for (let {var_name} = {start}; {var_name} < {end}; {var_name} += {step})"
+                code[i][1] = code[i][1].replace("{", "") + "{"
+            else:
+                code[i][1] = " " * code[i][0] + f"for (let {var_name} of {iter_expression})"
+                code[i][1] = code[i][1].replace("{", "") + "{"
+
+            code[i][1] = re.sub(r'len\((.*?)\)', r'\1.length', code[i][1])
+
     return code
 
 nome_arquivo = "insertion.py"
