@@ -16,8 +16,8 @@ def Main(fileName):
 
     code = tradutor(filtered_code)
 
-    for i in range(0, len(code)):
-        print(code[i])
+    # for i in range(0, len(code)):
+    #     print(code[i])
     for i in range(0, len(code)):
         print(code[i][1])
 
@@ -37,9 +37,7 @@ def splitCode(code):
     registrador = 0
     for i in range(len(code)):
         if code[i] == '\\' and code[i + 1] == 'n':
-            # print(code[i] + code[i + 1])
             splitedCode[nivel].append(code[registrador : i - 1])
-            # print(code[registrador : i])
             contSpaces = 0
             verificador = True
             j = i+2
@@ -68,7 +66,6 @@ def addBrackets(code):
 
         if nivel > code[i][0] and brackets > 0:
             numBrackets = int((nivel - code[i][0])/4)
-            print(numBrackets)
             code[i][1] = code[i][0] * " " + "}\n" * numBrackets + code[i][0] * " " + code[i][1]
             brackets -= 1
         else:
@@ -94,7 +91,7 @@ def tradutor(code):
                 if last_char == ']':
                     code[i][1] = code[i][1].replace(words[var_index],f"{words[var_index]}")
                 else:    
-                    code[i][1] = code[i][1].replace(words[var_index], f"let {words[var_index]}")
+                    code[i][1] = code[i][1].replace(words[var_index], f"let {words[var_index]}", 1)
 
         if words[0] == "while":
             condition_start = code[i][1].find("while") + len("while")
@@ -109,7 +106,6 @@ def tradutor(code):
             iter_expression = code[i][1][in_keyword_index + 2:].strip()
             if iter_expression.startswith("range("):
                 range_args = iter_expression[6:-2].split(',')
-                print(range_args)
                 if len(range_args) == 1:
                     start = 0
                     end = range_args[0]
@@ -129,6 +125,13 @@ def tradutor(code):
                 code[i][1] = code[i][1].replace("{", "") + "{"
 
             code[i][1] = re.sub(r'len\((.*?)\)', r'\1.length', code[i][1])
+
+        if words[0] == "if":
+            condition_start = code[i][1].find("if") + len("if")
+            condition = code[i][1][condition_start:].strip()
+            code[i][1] = " " * code[i][0] + f"if ({condition})"
+            code[i][1] = code[i][1].replace("{", "") + "{"
+            code[i][1] = code[i][1].replace("and", "&&").replace("or", "||")
 
     return code
 
