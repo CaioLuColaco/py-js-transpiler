@@ -90,7 +90,11 @@ def tradutor(code):
         if len(words) > 1 and "=" in words:
             var_index = words.index("=") - 1
             if var_index >= 0 and words[var_index] not in ["if", "for", "while"]:
-                code[i][1] = code[i][1].replace(words[var_index], f"let {words[var_index]}")
+                last_char = words[var_index][len(words[var_index]) - 1 :len(words[var_index])]
+                if last_char == ']':
+                    code[i][1] = code[i][1].replace(words[var_index],f"{words[var_index]}")
+                else:    
+                    code[i][1] = code[i][1].replace(words[var_index], f"let {words[var_index]}")
 
         if words[0] == "while":
             condition_start = code[i][1].find("while") + len("while")
