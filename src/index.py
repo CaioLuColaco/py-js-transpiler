@@ -102,8 +102,9 @@ def tradutor(code):
             var_name = words[1]
             in_keyword_index = code[i][1].find("in")
             iter_expression = code[i][1][in_keyword_index + 2:].strip()
-            if iter_expression.startswith("range(") and iter_expression.endswith(")"):
-                range_args = iter_expression[6:-1].split(',')
+            if iter_expression.startswith("range("):
+                range_args = iter_expression[6:-2].split(',')
+                print(range_args)
                 if len(range_args) == 1:
                     start = 0
                     end = range_args[0]
