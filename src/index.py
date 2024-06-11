@@ -16,8 +16,8 @@ def Main(fileName):
 
     code = tradutor(filtered_code)
 
-    # for i in range(0, len(code)):
-    #     print(code[i])
+    for i in range(0, len(code)):
+        print(code[i])
     for i in range(0, len(code)):
         print(code[i][1])
 
@@ -93,15 +93,16 @@ def tradutor(code):
                 else:    
                     code[i][1] = code[i][1].replace(words[var_index], f"let {words[var_index]}", 1)
 
-        if words[0] == "while":
+        if words[0] == "while" or "while" in code[i][1]:
             condition_start = code[i][1].find("while") + len("while")
             condition = code[i][1][condition_start:].strip()
             code[i][1] = " " * code[i][0] + f"while ({condition})"
             code[i][1] = code[i][1].replace("{", "") + "{"
             code[i][1] = code[i][1].replace("and", "&&").replace("or", "||")
         
-        if words[0] == "for":
-            var_name = words[1]
+        if words[0] == "for" or "for" in code[i][1]:
+            for_index = words.index("for")
+            var_name = words[for_index + 1]
             in_keyword_index = code[i][1].find("in")
             iter_expression = code[i][1][in_keyword_index + 2:].strip()
             if iter_expression.startswith("range("):
@@ -137,6 +138,6 @@ def tradutor(code):
 
     return code
 
-nome_arquivo = "insertion.py"
+nome_arquivo = "bubbleSort.py"
 
 Main(nome_arquivo)
