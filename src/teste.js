@@ -1,13 +1,14 @@
-function bubble_sort(arr){
-    let n = len(arr)
-    for (let i = 0; i < n; i += 1){
-        for (let j = 0; j <  n-i-1; j += 1){
-            if (arr[j] > arr[j+1]){
-                arr[j], arr[j+1] = arr[j+1], arr[j]
+function insertion_sort(arr){
+    for (let i = 1; i <  arr.length; i += 1){
+        let key = arr[i] 
+        let j = i - 1    
+        while (j >= 0 && key < arr[j]){
+            arr[j + 1] = arr[j]
+            j -= 1
+        }
+        arr[j + 1] = key
 }
 }
-}
-}
-let arr = [64, 34, 25, 12, 22, 11, 90]
-bubble_sort(arr)
-console.log("Sorted array is:", arr)
+let arr = [12, 11, 13, 5, 6]
+insertion_sort(arr)
+console.log("Lista ordenada:", arr)

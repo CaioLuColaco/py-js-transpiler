@@ -133,8 +133,10 @@ def tradutor(code):
             code[i][1] = code[i][1].replace("{", "") + "{"
             code[i][1] = code[i][1].replace("and", "&&").replace("or", "||")
 
+        code[i][1] = re.sub(r'len\((.*?)\)', r'\1.length', code[i][1])
+
     return code
 
-nome_arquivo = "bubbleSort.py"
+nome_arquivo = "insertion.py"
 
 Main(nome_arquivo)
