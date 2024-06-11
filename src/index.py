@@ -101,6 +101,7 @@ def tradutor(code):
             condition = code[i][1][condition_start:].strip()
             code[i][1] = " " * code[i][0] + f"while ({condition})"
             code[i][1] = code[i][1].replace("{", "") + "{"
+            code[i][1] = code[i][1].replace("and", "&&").replace("or", "||")
         
         if words[0] == "for":
             var_name = words[1]
