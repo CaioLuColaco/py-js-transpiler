@@ -16,8 +16,8 @@ def Main(fileName):
 
     code = tradutor(filtered_code)
 
-    for i in range(0, len(code)):
-        print(code[i])
+    # for i in range(0, len(code)):
+    #     print(code[i])
     for i in range(0, len(code)):
         print(code[i][1])
 
@@ -94,13 +94,15 @@ def tradutor(code):
                     code[i][1] = code[i][1].replace(words[var_index], f"let {words[var_index]}", 1)
 
         if words[0] == "while" or "while" in code[i][1]:
-            condition_start = code[i][1].find("while") + len("while")
+            position_while = code[i][1].find("while")
+            condition_start = position_while + len("while")
             condition = code[i][1][condition_start:].strip()
-            code[i][1] = " " * code[i][0] + f"while ({condition})"
+            code[i][1] = code[i][1][:position_while] + f"while ({condition})"
             code[i][1] = code[i][1].replace("{", "") + "{"
             code[i][1] = code[i][1].replace("and", "&&").replace("or", "||")
         
         if words[0] == "for" or "for" in code[i][1]:
+            position_for = code[i][1].find("for")
             for_index = words.index("for")
             var_name = words[for_index + 1]
             in_keyword_index = code[i][1].find("in")
@@ -119,7 +121,8 @@ def tradutor(code):
                     start = range_args[0]
                     end = range_args[1]
                     step = range_args[2]
-                code[i][1] = " " * code[i][0] + f"for (let {var_name} = {start}; {var_name} < {end}; {var_name} += {step})"
+                # code[i][1] = " " * code[i][0] + f"for (let {var_name} = {start}; {var_name} < {end}; {var_name} += {step})"
+                code[i][1] = code[i][1][:position_for] + f"for (let {var_name} = {start}; {var_name} < {end}; {var_name} += {step})"
                 code[i][1] = code[i][1].replace("{", "") + "{"
             else:
                 code[i][1] = " " * code[i][0] + f"for (let {var_name} of {iter_expression})"
