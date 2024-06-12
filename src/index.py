@@ -3,28 +3,33 @@ import re
 
 caminho_atual = os.path.dirname(__file__)
 
-def Main(fileName):
-    code =convertCodeToString(fileName)
+def Main(diretorio):
+    filenames = list_files(diretorio)
 
-    code = removeComents(code)
+    for i in range(0, len(filenames)):
+        fileName = filenames[i]
+        code = convertCodeToString(fileName)
 
-    code = splitCode(code)
+        code = removeComents(code)
 
-    filtered_code = [item for item in code if item[1] != '']
+        code = splitCode(code)
 
-    code = addBrackets(filtered_code)
+        filtered_code = [item for item in code if item[1] != '']
 
-    code = tradutor(filtered_code)
+        code = addBrackets(filtered_code)
 
-    gerar_arquivo_js(code, fileName)
+        code = tradutor(filtered_code)
 
-    # for i in range(0, len(code)):
-    #     print(code[i])
-    for i in range(0, len(code)):
-        print(code[i][1])
+        gerar_arquivo_js(code, fileName)
+
+        # for i in range(0, len(code)):
+        #     print(code[i])
+        for i in range(0, len(code)):
+            print(code[i][1])
+
 
 def convertCodeToString(fileName):
-    filePath = caminho_atual + '/' + fileName
+    filePath = caminho_atual + '/PythonCodes/' + fileName
     with open(filePath, 'r') as arquivo:
         codigo = arquivo.read()
     return codigo.replace('\n', '\\n')
@@ -151,7 +156,19 @@ def gerar_arquivo_js(code, filename):
         for linha in code:
             conteudo = linha[1]
             arquivo_js.write(f"{conteudo}\n")
+    
+    print(f"\n\nArquivo {filename.replace("py", "js")} gerado!\n\n")
 
-nome_arquivo = "mergeSort.py"
+def list_files(diretorio):
+    nomes_arquivos = []
+    
+    for arquivo in os.listdir(diretorio):
+        caminho_arquivo = os.path.join(diretorio, arquivo)
+        if os.path.isfile(caminho_arquivo):
+            nomes_arquivos.append(arquivo)
+    
+    return nomes_arquivos
 
-Main(nome_arquivo)
+diretorio = caminho_atual + '/PythonCodes'
+
+Main(diretorio)
