@@ -3,8 +3,13 @@ def merge_sort(arr):
         mid = len(arr) // 2  # Dividir o array ao meio
 
         # Criar arrays vazios para as metades
-        left_half = [0] * mid
-        right_half = [0] * (len(arr) - mid)
+        left_half = []
+        right_half = []
+
+        for i in range(mid):
+            left_half.append(arr[i])
+        for i in range(mid, len(arr)):
+            right_half.append(arr[i])
 
         # Copiar dados para os arrays temporários
         for i in range(0, mid):

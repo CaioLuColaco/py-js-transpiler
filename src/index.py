@@ -16,6 +16,8 @@ def Main(fileName):
 
     code = tradutor(filtered_code)
 
+    gerar_arquivo_js(code, fileName)
+
     # for i in range(0, len(code)):
     #     print(code[i])
     for i in range(0, len(code)):
@@ -121,7 +123,6 @@ def tradutor(code):
                     start = range_args[0]
                     end = range_args[1]
                     step = range_args[2]
-                # code[i][1] = " " * code[i][0] + f"for (let {var_name} = {start}; {var_name} < {end}; {var_name} += {step})"
                 code[i][1] = code[i][1][:position_for] + f"for (let {var_name} = {start}; {var_name} < {end}; {var_name} += {step})"
                 code[i][1] = code[i][1].replace("{", "") + "{"
             else:
@@ -137,10 +138,20 @@ def tradutor(code):
             code[i][1] = code[i][1].replace("{", "") + "{"
             code[i][1] = code[i][1].replace("and", "&&").replace("or", "||")
 
+        if "//" in code[i][1]:
+            code[i][1] = re.sub(r'(\S+)\s*//\s*(\S+)', r'Math.floor(\1 / \2)', code[i][1])
+
         code[i][1] = re.sub(r'len\((.*?)\)', r'\1.length', code[i][1])
+        code[i][1] = code[i][1].replace("append", "push")
 
     return code
 
-nome_arquivo = "bubbleSort.py"
+def gerar_arquivo_js(code, filename):
+    with open(filename.replace("py", "js"), 'w') as arquivo_js:
+        for linha in code:
+            conteudo = linha[1]
+            arquivo_js.write(f"{conteudo}\n")
+
+nome_arquivo = "mergeSort.py"
 
 Main(nome_arquivo)
